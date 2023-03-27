@@ -1,0 +1,693 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body
+{
+    font-family: "Exo 2", sans-serif;
+}
+
+.container
+{
+    height: 100vh;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-gap: 10px;
+    grid-template-areas: "header"
+                         "content"
+                         "footer";
+}
+
+.container > *
+{
+    padding: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.header
+{
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    background-color: #06668C;
+    padding: 20px;
+}
+
+img
+{
+    margin-right: 30px;
+}
+
+.header > ul
+{
+    width: 65%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 20px;
+    text-align: center;
+    list-style: none;
+    color: #EBF2FA;
+    font-size: 26px;
+}
+
+.header ul li
+{
+    align-self: center;
+}
+
+li > a
+{
+    text-decoration: none;
+    color: #EBF2FA;
+}
+
+li > a:hover
+{
+    color: #A4BD01;
+}
+
+.content
+{
+    grid-area: content;
+    width: 90%;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    grid-gap: 15px;
+}
+
+.content2
+{
+    grid-area: content;
+    width: 60%;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    grid-gap: 15px;
+}
+
+.content3
+{
+    grid-area: content;
+    width: 90%;
+    margin: 30px auto;
+}
+
+.content3 > div
+{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 0.35fr));
+    grid-gap: 15px;
+}
+
+.content4
+{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.content4 > *
+{
+    margin-bottom: 30px;
+}
+
+.content3 .aucunEtudiant
+{
+    display: block;
+}
+
+.aucunEtudiant
+{
+    width: 100%;
+
+    justify-self: center;
+    align-self: center;
+}
+
+h2
+{
+    color: #427AA1;
+}
+
+.contacter
+{
+    margin-left: 30px;
+}
+
+.ul > li
+{
+    margin-left: 60px;
+    font-size: 22px;
+}
+
+.lien
+{
+    color: #679436;
+}
+
+.horaires
+{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 240px;
+    width: 90%;
+    margin: auto;
+    font-size: 20px;
+
+}
+
+.horaire
+{
+    width: 350px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.aujourdhui-ouvert
+{
+    font-size: 22px;
+    color: green;
+}
+
+.aujourdhui-ferme
+{
+    font-size: 22px;
+    color: red;
+}
+
+
+.carte
+{
+    background-color: #EBF2FA;
+    display: grid;
+    grid-template-columns: 1fr;
+    border-radius: 10px;
+    grid-row-gap: 25px;
+
+}
+
+.image
+{
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+    width: 60%;
+    max-height: 300px;
+    justify-self: center;
+    align-self: center;
+    margin: 0;
+    border: 1px solid #427AA1;
+}
+
+.nom-prenom
+{
+    grid-row: 2 / 3;
+    justify-self: center;
+    align-self: center;
+}
+
+.date-naissance
+{
+    grid-row: 3 / 4;
+    justify-self: center;
+    align-self: center;
+}
+
+.age
+{
+    grid-row: 4 / 5;
+    justify-self: center;
+    align-self: center;
+}
+
+.rouge
+{
+    color: red;
+}
+
+.vert
+{
+    color: green;
+}
+
+.bouton
+{
+    grid-row: 5 / 6;
+    background-color: #427AA1;
+    text-decoration: none;
+    color: #EBF2FA;
+    text-align: center;
+    font-size: 22px;
+    padding: 10px;
+    text-transform: uppercase;
+    border-radius: 0 0 10px 10px;
+    transition: all 700ms;
+}
+
+
+.bouton:hover
+{
+    background-color: #A4BD01;
+}
+
+.carte2
+{
+    background-color: #EBF2FA;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    border-radius: 10px;
+    grid-row-gap: 25px;
+}
+
+.carte2 i
+{
+    color: #427AA1;
+}
+
+.image2
+{
+    grid-row: 1 / 2;
+    grid-column: 1 / -1;
+    justify-self: center;
+    align-self: center;
+    width: 30%;
+    margin: 0;
+    border: 1px solid #427AA1;
+}
+
+.nom-prenom2
+{
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    align-self: center;
+    justify-self: center;
+    font-size: 40px;
+}
+
+.promotion
+{
+    grid-column: 1 / 3;
+    grid-row: 3 / 4;
+    align-self: center;
+    justify-self: center;
+}
+
+.date-naissance2
+{
+    grid-column: 1 / 2;
+    grid-row: 4 / 5;
+    align-self: center;
+    justify-self: center;
+}
+
+.adresse
+{
+    grid-column: 1 / -1;
+    grid-row: 5 / 6;
+    align-self: center;
+    justify-self: center;
+}
+
+.email
+{
+    grid-column: 1 / 2;
+    grid-row: 6 / 7;
+    align-self: center;
+    justify-self: center;
+}
+
+.telephone
+{
+    grid-column: 2 / 3;
+    grid-row: 6 / 7;
+    align-self: center;
+    justify-self: center;
+}
+
+.age2
+{
+    grid-row: 4 / 5;
+    grid-column: 2 / 3;
+    justify-self: center;
+    align-self: center;
+}
+
+.bouton2
+{
+    grid-column: 1 / -1;
+    grid-row: 7 / 8;
+    background-color: #427AA1;
+    text-decoration: none;
+    color: #EBF2FA;
+    text-align: center;
+    font-size: 18px;
+    padding: 20px;
+    margin-top: 40px;
+    text-transform: uppercase;
+    border-radius: 0 0 10px 10px;
+    transition: all 700ms;
+}
+
+.bouton2:hover
+{
+    background-color: #A4BD01;
+}
+
+form
+{
+    width: 50%;
+    margin: 10px auto;
+}
+
+form > *
+{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+form > label
+{
+    font-weight: bold;
+}
+
+form > input, select
+{
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #427AA1;
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: "Exo 2", sans-serif;
+}
+
+form > textarea
+{
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #427AA1;
+    border-radius: 5px;
+    resize: none;
+    font-size: 18px;
+    font-family: "Exo 2", sans-serif;
+}
+
+form > input[type=submit]
+{
+    width: 100%;
+    background: #427AA1;
+    color: #EBF2FA;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    font-family: "Exo 2", sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 700ms;
+}
+
+form > input[type=submit]:hover
+{
+    background: #A4BD01;
+}
+
+.form2
+{
+    width: 80%;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: repeat(2,minmax(200px,50%));
+    grid-column-gap: 20px;
+}
+
+.form2 > *
+{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.form2 > label
+{
+    font-weight: bold;
+}
+
+.message
+{
+    grid-column: 1 / 3;
+}
+
+.form2 > input
+{
+    display: block;
+    width: 80%;
+    padding: 12px;
+    border: 1px solid #427AA1;
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: "Exo 2", sans-serif;
+}
+
+.form2 > textarea
+{
+    grid-column: 1 / 3;
+    display: block;
+    width: 90%;
+    padding: 12px;
+    border: 1px solid #427AA1;
+    border-radius: 5px;
+    resize: none;
+    font-size: 18px;
+    font-family: "Exo 2", sans-serif;
+}
+
+.form2 > input[type=submit]
+{
+    width: 80%;
+    background: #427AA1;
+    color: #EBF2FA;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    font-family: "Exo 2", sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 700ms;
+}
+
+.form2 > input[type=submit]:hover
+{
+    background: #A4BD01;
+}
+
+.requis
+{
+    width: 80%;
+}
+
+.motif
+{
+    grid-column: 1 / 2;
+}
+
+.erreur-validation
+{
+    color: red;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.erreur-validation2
+{
+    color: red;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    grid-column: 1 / 2;
+    width: 80%;
+}
+
+.vide-erreur1
+{
+    grid-column: 2 / 3;
+}
+
+.erreur-validation3
+{
+    color: red;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    grid-column: 2 / 3;
+    width: 80%;
+}
+
+.vide-erreur2
+{
+    grid-column: 1 / 2;
+}
+
+.etoile
+{
+    color: #679436;
+}
+
+.flex-form
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-form > select
+{
+    width: 75%;
+}
+
+.flex-form > input[type=submit]
+{
+    width: 20%;
+    background: #427AA1;
+    color: #EBF2FA;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    font-family: "Exo 2", sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 700ms;
+}
+
+.flex-form > input[type=submit]:hover
+{
+    background: #A4BD01;
+}
+
+.intro-contact
+{
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+}
+
+.intro-contact h2
+{
+    font-size: 25px;
+    width: 85%;
+    margin-bottom: 10px;
+}
+
+.intro1
+{
+    grid-column: 1 / 2;
+    width: 70%;
+}
+
+.intro2
+{
+    grid-column: 2 / 3;
+    width: 70%;
+}
+
+.footer
+{
+    grid-area: footer;
+    background-color: #679436;
+}
+
+.contact
+{
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
+}
+
+.contact > a
+{
+    font-size: 40px;
+    color: #06668C;
+}
+
+.contact > a:hover
+{
+    color: #427AA1;
+}
+
+.grid
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.grid i, .grid2 i
+{
+    font-size: 150px;
+    justify-self: center;
+    color: #427AA1;
+}
+
+.grid form, .grid2 form
+{
+    width: 30%;
+    margin: 0 auto;
+}
+
+.grid form .erreur-validation
+{
+    margin: 0;
+}
+
+.grid .autre, .grid2 .autre
+{
+    width: 25%;
+    text-align: center;
+}
+
+form .cgu input[type=checkbox]
+{
+    margin-right: 10px;
+}
+
+.grid a, .grid2 a
+{
+    color: #06668C;
+}
+
+.grid div a:hover, .grid2 div a:hover
+{
+    color: #679436;
+}
+
+.grid2
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media screen and (max-width: 721px) {
+
+    .intro-contact
+    {
+        grid-template-columns: 100%;
+    }
+
+    .intro1
+    {
+        grid-column: 1 / 2;
+        width: 90%;
+        margin-bottom: 20px;
+    }
+
+    .intro2
+    {
+        grid-column: 1 / 2;
+        width: 90%;
+    }
+}
