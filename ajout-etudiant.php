@@ -129,7 +129,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <li><a href="ajout-etudiant.php">Ajouter un étudiant</a></li>
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
-            <li><a href="connexion.php">Connexion</a></li>
+            <?php if (isset($_SESSION["user"])) { ?>
+                <li><a href="deconnexion.php">Déconnexion</a></li>
+            <?php } else { ?>
+                <li><a href="connexion.php">Connexion</a></li>
+            <?php } ?>
         </ul>
     </header>
 
