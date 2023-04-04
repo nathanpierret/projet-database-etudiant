@@ -36,7 +36,7 @@
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
             <?php if (isset($_SESSION["user"])) { ?>
-            <li><a href="deconnexion.php">Déconnexion</a></li>
+            <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
             <?php } else { ?>
             <li><a href="connexion.php">Connexion</a></li>
             <?php } ?>
@@ -64,7 +64,6 @@
             <a href="detail-etudiant.php?id=<?=$etudiant['id_etudiant']?>" class="bouton">Détails</a>
         </div>
         <?php } ?>
-
     </div>
 
     <footer class="footer">
