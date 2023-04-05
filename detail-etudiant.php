@@ -1,16 +1,21 @@
 <?php
+    session_start();
+    if (isset($_GET["deco"])) {
+        unset($_SESSION["user"]);
+        header("Location: detail-etudiant.php");
+    } else {
+        require_once "src/modele/etudiant-db.php";
+        require_once "src/modele/promotion-db.php";
+        require_once "src/outils/dates.php";
 
-require_once "src/modele/etudiant-db.php";
-require_once "src/modele/promotion-db.php";
-require_once "src/outils/dates.php";
+        if (!empty($_GET['id'])) {
+            $id = intval($_GET['id']);
+        }
 
-if (!empty($_GET['id'])) {
-    $id = intval($_GET['id']);
-}
-
-$etudiant = selectStudentById($id);
-$promotion = selectPromotionById($etudiant["id_promotion"]);
-
+        $etudiant = selectStudentById($id);
+        $promotion = selectPromotionById($etudiant["id_promotion"]);
+        $_SESSION["last-visited"] = "detail-etudiant.php?id=$id";
+    }
 ?>
 
 <!doctype html>
@@ -41,7 +46,7 @@ $promotion = selectPromotionById($etudiant["id_promotion"]);
                 <li><a href="liste-promotions.php">Liste des promotions</a></li>
                 <li><a href="contacts.php">Contactez-nous</a></li>
                 <?php if (isset($_SESSION["user"])) { ?>
-                    <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
+                    <li><a href="detail-etudiant.php?id=<?= $id?>">Déconnexion</a></li>
                 <?php } else { ?>
                     <li><a href="connexion.php">Connexion</a></li>
                 <?php } ?>

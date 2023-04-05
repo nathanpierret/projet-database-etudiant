@@ -1,49 +1,55 @@
 <?php
     session_start();
-    require_once "src/modele/utilisateurs-db.php";
+    if (isset($_GET["deco"])) {
+        unset($_SESSION["user"]);
+        header("Location: connexion.php");
+    } else {
+        require_once "src/modele/utilisateurs-db.php";
 
-    $users = selectAllUsers();
-    $prenomUtilisateur = null;
-    $nomUtilisateur = null;
-    $emailUtilisateur = null;
-    $motDePasse = null;
-    $erreurs = [];
+        $users = selectAllUsers();
+        $prenomUtilisateur = null;
+        $nomUtilisateur = null;
+        $emailUtilisateur = null;
+        $motDePasse = null;
+        $erreurs = [];
+        $lastVisited = $_SESSION["last-visited"];
 
-    if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-        if (empty(trim($_POST["email-utilisateur"]))) {
-            $erreurs["mail"] = "L'e-mail est obligatoire !";
-        } elseif (!filter_var($_POST["email-utilisateur"], FILTER_VALIDATE_EMAIL)) {
-            $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
-        } else {
-            foreach ($users as $user) {
-                if ($user["email_utilisateur"] == trim($_POST["email-utilisateur"])) {
-                    $emailUtilisateur = trim($_POST["email-utilisateur"]);
-                    break;
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            if (empty(trim($_POST["email-utilisateur"]))) {
+                $erreurs["mail"] = "L'e-mail est obligatoire !";
+            } elseif (!filter_var($_POST["email-utilisateur"], FILTER_VALIDATE_EMAIL)) {
+                $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
+            } else {
+                foreach ($users as $user) {
+                    if ($user["email_utilisateur"] == trim($_POST["email-utilisateur"])) {
+                        $emailUtilisateur = trim($_POST["email-utilisateur"]);
+                        break;
+                    }
+                }
+                if (!isset($emailUtilisateur)) {
+                    $erreurs["connexion"] = "Un problème est survenu lors de l'authentification !";
                 }
             }
-            if (!isset($emailUtilisateur)) {
-                $erreurs["connexion"] = "Un problème est survenu lors de l'authentification !";
-            }
-        }
 
-        if (empty(trim($_POST["mot-de-passe"]))) {
-            $erreurs["motDePasse"] = "Le mot de passe est obligatoire !";
-        } elseif (!empty($erreurs["connexion"])) {
-            $erreurs["connexion"] = "Un problème est survenu lors de l'authentification !";
-        } else {
-            $user = selectUserByEmail($emailUtilisateur);
-            if (password_verify(trim($_POST["mot-de-passe"]),$user["mot_de_passe"])) {
-                $motDePasse = trim($_POST["mot-de-passe"]);
-            } else {
+            if (empty(trim($_POST["mot-de-passe"]))) {
+                $erreurs["motDePasse"] = "Le mot de passe est obligatoire !";
+            } elseif (!empty($erreurs["connexion"])) {
                 $erreurs["connexion"] = "Un problème est survenu lors de l'authentification !";
+            } else {
+                $user = selectUserByEmail($emailUtilisateur);
+                if (password_verify(trim($_POST["mot-de-passe"]), $user["mot_de_passe"])) {
+                    $motDePasse = trim($_POST["mot-de-passe"]);
+                } else {
+                    $erreurs["connexion"] = "Un problème est survenu lors de l'authentification !";
+                }
             }
-        }
-        if (empty($erreurs)) {
-            $_SESSION["user"]["prenom-utilisateur"] = $user["prenom_utilisateur"];
-            $_SESSION["user"]["nom-utilisateur"] = $user["nom_utilisateur"];
-            $_SESSION["user"]["email-utilisateur"] = $user["email_utilisateur"];
-            $_SESSION["user"]["mot-de-passe"] = $user["mot_de_passe"];
-            header("Location: index.php");
+            if (empty($erreurs)) {
+                $_SESSION["user"]["prenom-utilisateur"] = $user["prenom_utilisateur"];
+                $_SESSION["user"]["nom-utilisateur"] = $user["nom_utilisateur"];
+                $_SESSION["user"]["email-utilisateur"] = $user["email_utilisateur"];
+                $_SESSION["user"]["mot-de-passe"] = $user["mot_de_passe"];
+                header("Location: $lastVisited");
+            }
         }
     }
 ?>
@@ -76,7 +82,7 @@
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
             <?php if (isset($_SESSION["user"])) { ?>
-                <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
+                <li><a href="connexion.php?deco=ok">Déconnexion</a></li>
             <?php } else { ?>
                 <li><a href="connexion.php">Connexion</a></li>
             <?php } ?>

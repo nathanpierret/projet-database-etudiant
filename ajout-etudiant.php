@@ -1,105 +1,111 @@
 <?php
-
-    require_once "src/modele/etudiant-db.php";
-    require_once "src/modele/promotion-db.php";
-
-    $promotions = selectAllPromotions();
-
-    $prenom = null;
-    $nom = null;
-    $dateNaissance = null;
-    $rue = null;
-    $codePostal = null;
-    $ville = null;
-    $mail = null;
-    $telephone = null;
-    $promotion = null;
-    $erreurs = [];
-
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-    if (empty(trim($_POST["prenom"]))) {
-        $erreurs["prenom"] = "Le prénom est obligatoire !";
+    session_start();
+    if (isset($_GET["deco"])) {
+        unset($_SESSION["user"]);
+        header("Location: ajout-etudiant.php");
     } else {
-        $prenom = trim($_POST["prenom"]);
-    }
+        require_once "src/modele/etudiant-db.php";
+        require_once "src/modele/promotion-db.php";
 
-    if (empty(trim($_POST["nom"]))) {
-        $erreurs["nom"] = "Le nom est obligatoire !";
-    } else {
-        $nom = trim($_POST["nom"]);
-    }
+        $promotions = selectAllPromotions();
 
-    if (empty(trim($_POST["date-naissance"]))) {
-        $erreurs["dateNaissance"] = "La date de naissance est obligatoire !";
-    } else {
-        $dateNaissance = trim($_POST["date-naissance"]);
-    }
+        $prenom = null;
+        $nom = null;
+        $dateNaissance = null;
+        $rue = null;
+        $codePostal = null;
+        $ville = null;
+        $mail = null;
+        $telephone = null;
+        $promotion = null;
+        $erreurs = [];
+        $_SESSION["last-visited"] = "ajout-etudiant.php";
 
-    if (empty(trim($_POST["rue"]))) {
-        $erreurs["rue"] = "La rue est obligatoire !";
-    } else {
-        $rue = trim($_POST["rue"]);
-    }
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    if (empty(trim($_POST["code-postal"]))) {
-        $erreurs["codePostal"] = "Le code postal est obligatoire !";
-    } else {
-        $codePostal = trim($_POST["code-postal"]);
-    }
-
-    if (empty(trim($_POST["ville"]))) {
-        $erreurs["ville"] = "La ville est obligatoire !";
-    } else {
-        $ville = trim($_POST["ville"]);
-    }
-
-    if (empty(trim($_POST["mail"]))) {
-        $erreurs["mail"] = "L'e-mail est obligatoire !";
-    } elseif (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)) {
-        $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
-    } else {
-        $mail = trim($_POST["mail"]);
-    }
-
-    if (empty(trim($_POST["telephone"]))) {
-        $erreurs["telephone"] = "Le numéro de téléphone est obligatoire !";
-    } else {
-        $telephone = trim($_POST["telephone"]);
-    }
-
-    if (!empty($_POST["promotion"])) {
-        $promotion = $_POST["promotion"];
-    }
-
-    if (empty($_FILES["photo"]["name"])) {
-        $erreurs["photo"] = "La photo est obligatoire !";
-    } else {
-        $nomFichier = $_FILES["photo"]["name"];
-        $typeFichier = $_FILES["photo"]["type"];
-        $tmpFichier = $_FILES["photo"]["tmp_name"];
-        $tailleFichier = $_FILES["photo"]["size"];
-        $extensionFichier = pathinfo($nomFichier,PATHINFO_EXTENSION);
-        if (!str_contains($typeFichier, "image")) {
-            $erreurs["photo"] = "Seules les images sont acceptées !";
-        } else {
-            //Tester la taille du fichier
-            if ($tailleFichier > 600 * 1024) {
-                $erreurs["photo"] = "Une image ne doit pas dépasser 600 ko !";
+            if (empty(trim($_POST["prenom"]))) {
+                $erreurs["prenom"] = "Le prénom est obligatoire !";
             } else {
-                $nomFichier = uniqid().".".$extensionFichier;
-                if (!move_uploaded_file($tmpFichier,"images/$nomFichier")) {
-                    $erreurs["photo"] = "Un problème interne est survenu !";
+                $prenom = trim($_POST["prenom"]);
+            }
+
+            if (empty(trim($_POST["nom"]))) {
+                $erreurs["nom"] = "Le nom est obligatoire !";
+            } else {
+                $nom = trim($_POST["nom"]);
+            }
+
+            if (empty(trim($_POST["date-naissance"]))) {
+                $erreurs["dateNaissance"] = "La date de naissance est obligatoire !";
+            } else {
+                $dateNaissance = trim($_POST["date-naissance"]);
+            }
+
+            if (empty(trim($_POST["rue"]))) {
+                $erreurs["rue"] = "La rue est obligatoire !";
+            } else {
+                $rue = trim($_POST["rue"]);
+            }
+
+            if (empty(trim($_POST["code-postal"]))) {
+                $erreurs["codePostal"] = "Le code postal est obligatoire !";
+            } else {
+                $codePostal = trim($_POST["code-postal"]);
+            }
+
+            if (empty(trim($_POST["ville"]))) {
+                $erreurs["ville"] = "La ville est obligatoire !";
+            } else {
+                $ville = trim($_POST["ville"]);
+            }
+
+            if (empty(trim($_POST["mail"]))) {
+                $erreurs["mail"] = "L'e-mail est obligatoire !";
+            } elseif (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)) {
+                $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
+            } else {
+                $mail = trim($_POST["mail"]);
+            }
+
+            if (empty(trim($_POST["telephone"]))) {
+                $erreurs["telephone"] = "Le numéro de téléphone est obligatoire !";
+            } else {
+                $telephone = trim($_POST["telephone"]);
+            }
+
+            if (!empty($_POST["promotion"])) {
+                $promotion = $_POST["promotion"];
+            }
+
+            if (empty($_FILES["photo"]["name"])) {
+                $erreurs["photo"] = "La photo est obligatoire !";
+            } else {
+                $nomFichier = $_FILES["photo"]["name"];
+                $typeFichier = $_FILES["photo"]["type"];
+                $tmpFichier = $_FILES["photo"]["tmp_name"];
+                $tailleFichier = $_FILES["photo"]["size"];
+                $extensionFichier = pathinfo($nomFichier, PATHINFO_EXTENSION);
+                if (!str_contains($typeFichier, "image")) {
+                    $erreurs["photo"] = "Seules les images sont acceptées !";
+                } else {
+                    //Tester la taille du fichier
+                    if ($tailleFichier > 600 * 1024) {
+                        $erreurs["photo"] = "Une image ne doit pas dépasser 600 ko !";
+                    } else {
+                        $nomFichier = uniqid() . "." . $extensionFichier;
+                        if (!move_uploaded_file($tmpFichier, "images/$nomFichier")) {
+                            $erreurs["photo"] = "Un problème interne est survenu !";
+                        }
+                    }
                 }
+            }
+            if (empty($erreurs)) {
+                $adresse = $rue . " " . $codePostal . " " . $ville;
+                addStudent($nom, $prenom, $mail, $adresse, $telephone, $dateNaissance, $nomFichier, $promotion);
+                header("Location: index.php");
             }
         }
     }
-    if (empty($erreurs)) {
-        $adresse = $rue." ".$codePostal." ".$ville;
-        addStudent($nom, $prenom, $mail,$adresse, $telephone, $dateNaissance, $nomFichier,$promotion);
-        header("Location: index.php");
-    }
-}
 ?>
 
 <!doctype html>
@@ -130,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
             <?php if (isset($_SESSION["user"])) { ?>
-                <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
+                <li><a href="ajout-etudiant.php?deco=ok">Déconnexion</a></li>
             <?php } else { ?>
                 <li><a href="connexion.php">Connexion</a></li>
             <?php } ?>

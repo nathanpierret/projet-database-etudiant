@@ -1,58 +1,64 @@
 <?php
     session_start();
-    require_once "src/modele/utilisateurs-db.php";
+    if (isset($_GET["deco"])) {
+        unset($_SESSION["user"]);
+        header("Location: inscription.php");
+    } else {
+        require_once "src/modele/utilisateurs-db.php";
 
-    $prenomUtilisateur = null;
-    $nomUtilisateur = null;
-    $emailUtilisateur = null;
-    $motDePasse = null;
-    $erreurs = [];
+        $prenomUtilisateur = null;
+        $nomUtilisateur = null;
+        $emailUtilisateur = null;
+        $motDePasse = null;
+        $erreurs = [];
+        $lastVisited = $_SESSION["last-visited"];
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $verifMotDePasse = verifyPassword($_POST["mot-de-passe"]);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $verifMotDePasse = verifyPassword($_POST["mot-de-passe"]);
 
-        if (empty(trim($_POST["prenom-utilisateur"]))) {
-            $erreurs["prenom"] = "Le prénom est obligatoire !";
-        } else {
-            $prenomUtilisateur = trim($_POST["prenom-utilisateur"]);
-        }
+            if (empty(trim($_POST["prenom-utilisateur"]))) {
+                $erreurs["prenom"] = "Le prénom est obligatoire !";
+            } else {
+                $prenomUtilisateur = trim($_POST["prenom-utilisateur"]);
+            }
 
-        if (empty(trim($_POST["nom-utilisateur"]))) {
-            $erreurs["nom"] = "Le nom est obligatoire !";
-        } else {
-            $nomUtilisateur = trim($_POST["nom-utilisateur"]);
-        }
+            if (empty(trim($_POST["nom-utilisateur"]))) {
+                $erreurs["nom"] = "Le nom est obligatoire !";
+            } else {
+                $nomUtilisateur = trim($_POST["nom-utilisateur"]);
+            }
 
-        if (empty(trim($_POST["email-utilisateur"]))) {
-            $erreurs["mail"] = "L'e-mail est obligatoire !";
-        } elseif (!filter_var($_POST["email-utilisateur"], FILTER_VALIDATE_EMAIL)) {
-            $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
-        } else {
-            $emailUtilisateur = trim($_POST["email-utilisateur"]);
-        }
+            if (empty(trim($_POST["email-utilisateur"]))) {
+                $erreurs["mail"] = "L'e-mail est obligatoire !";
+            } elseif (!filter_var($_POST["email-utilisateur"], FILTER_VALIDATE_EMAIL)) {
+                $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
+            } else {
+                $emailUtilisateur = trim($_POST["email-utilisateur"]);
+            }
 
-        if (empty(trim($_POST["mot-de-passe"]))) {
-            $erreurs["motDePasse"] = "Le mot de passe est obligatoire !";
-        } elseif (isset($verifMotDePasse)) {
-            $erreurs["motDePasse"] = $verifMotDePasse;
-        } elseif (trim($_POST["mot-de-passe"]) <> trim($_POST["mot-de-passe2"])) {
-            $erreurs["motDePasse2"] = "Les mots de passe sont différents !";
-        } else {
-            $motDePasse = trim($_POST["mot-de-passe"]);
-        }
+            if (empty(trim($_POST["mot-de-passe"]))) {
+                $erreurs["motDePasse"] = "Le mot de passe est obligatoire !";
+            } elseif (isset($verifMotDePasse)) {
+                $erreurs["motDePasse"] = $verifMotDePasse;
+            } elseif (trim($_POST["mot-de-passe"]) <> trim($_POST["mot-de-passe2"])) {
+                $erreurs["motDePasse2"] = "Les mots de passe sont différents !";
+            } else {
+                $motDePasse = trim($_POST["mot-de-passe"]);
+            }
 
-        if ($_POST["cgu"] <> "on") {
-            $erreurs["cgu"] = "Vous devez accepter les Conditions Générales d'Utilisation !";
-        }
+            if ($_POST["cgu"] <> "on") {
+                $erreurs["cgu"] = "Vous devez accepter les Conditions Générales d'Utilisation !";
+            }
 
-        if (empty($erreurs)) {
-            $hash = password_hash($motDePasse,PASSWORD_ARGON2I);
-            $_SESSION["user"]["prenom-utilisateur"] = $prenomUtilisateur;
-            $_SESSION["user"]["nom-utilisateur"] = $nomUtilisateur;
-            $_SESSION["user"]["email-utilisateur"] = $emailUtilisateur;
-            $_SESSION["user"]["mot-de-passe"] = $hash;
-            addUser($nomUtilisateur,$prenomUtilisateur,$emailUtilisateur,$hash);
-            header("Location: index.php");
+            if (empty($erreurs)) {
+                $hash = password_hash($motDePasse, PASSWORD_ARGON2I);
+                $_SESSION["user"]["prenom-utilisateur"] = $prenomUtilisateur;
+                $_SESSION["user"]["nom-utilisateur"] = $nomUtilisateur;
+                $_SESSION["user"]["email-utilisateur"] = $emailUtilisateur;
+                $_SESSION["user"]["mot-de-passe"] = $hash;
+                addUser($nomUtilisateur, $prenomUtilisateur, $emailUtilisateur, $hash);
+                header("Location: $lastVisited");
+            }
         }
     }
 ?>
@@ -85,7 +91,7 @@
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
             <?php if (isset($_SESSION["user"])) { ?>
-                <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
+                <li><a href="inscription.php?deco=ok">Déconnexion</a></li>
             <?php } else { ?>
                 <li><a href="connexion.php">Connexion</a></li>
             <?php } ?>

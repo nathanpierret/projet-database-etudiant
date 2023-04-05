@@ -1,69 +1,75 @@
 <?php
+    session_start();
+    if (isset($_GET["deco"])) {
+        unset($_SESSION["user"]);
+        header("Location: contacts.php");
+    } else {
+        require_once "src/modele/horaires-db.php";
+        require_once "src/modele/contacts-db.php";
+        require_once "src/outils/dates.php";
 
-    require_once "src/modele/horaires-db.php";
-    require_once "src/modele/contacts-db.php";
-    require_once "src/outils/dates.php";
+        $horaires = selectAllTimeAreas();
 
-    $horaires = selectAllTimeAreas();
+        $destinataire = "secretariat.best-students@ac-besancon.fr";
+        $prenom = null;
+        $nom = null;
+        $mail = null;
+        $telephone = null;
+        $motif = null;
+        $message = null;
+        $erreurs = [];
+        $_SESSION["last-visited"] = "contacts.php";
 
-    $destinataire = "secretariat.best-students@ac-besancon.fr";
-    $prenom = null;
-    $nom = null;
-    $mail = null;
-    $telephone = null;
-    $motif = null;
-    $message = null;
-    $erreurs = [];
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-        if (empty(trim($_POST["prenom"]))) {
-            $erreurs["prenom"] = "Le prénom est obligatoire !";
-        } else {
-            $prenom = trim($_POST["prenom"]);
-        }
-
-        if (empty(trim($_POST["nom"]))) {
-            $erreurs["nom"] = "Le nom est obligatoire !";
-        } else {
-            $nom = trim($_POST["nom"]);
-        }
-
-        if (empty(trim($_POST["mail"]))) {
-            $erreurs["mail"] = "L'e-mail est obligatoire !";
-        } elseif (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)) {
-            $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
-        } else {
-            $mail = trim($_POST["mail"]);
-        }
-
-        if (empty(trim($_POST["telephone"]))) {
-            $erreurs["telephone"] = "Le numéro de téléphone est obligatoire !";
-        } else {
-            $telephone = trim($_POST["telephone"]);
-        }
-
-        if (empty(trim($_POST["motif"]))) {
-            $erreurs["motif"] = "L'objet du mail est obligatoire !";
-        } else {
-            $motif = trim($_POST["motif"]);
-        }
-
-        if (empty(trim($_POST["message"]))) {
-            $erreurs["message"] = "Le mail doit contenir un message !";
-        } else {
-            $message = trim($_POST["message"]);
-        }
-
-        if (empty($erreurs)) {
-            $entetes = [
-                "from" => $mail,
-                "content-type" => "text/plain; charset=utf-8"
-            ];
-            if (mail($destinataire,$_POST["motif"],$_POST["message"],$entetes)) {
-                addMail($prenom, $nom, $mail, $telephone, $motif, $message);
+            if (empty(trim($_POST["prenom"]))) {
+                $erreurs["prenom"] = "Le prénom est obligatoire !";
             } else {
-                echo "Une erreur est survenue.";
+                $prenom = trim($_POST["prenom"]);
+            }
+
+            if (empty(trim($_POST["nom"]))) {
+                $erreurs["nom"] = "Le nom est obligatoire !";
+            } else {
+                $nom = trim($_POST["nom"]);
+            }
+
+            if (empty(trim($_POST["mail"]))) {
+                $erreurs["mail"] = "L'e-mail est obligatoire !";
+            } elseif (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)) {
+                $erreurs["mail"] = "Il faut que l'adresse mail soit valide (avec un @ et un nom de domaine valide) !";
+            } else {
+                $mail = trim($_POST["mail"]);
+            }
+
+            if (empty(trim($_POST["telephone"]))) {
+                $erreurs["telephone"] = "Le numéro de téléphone est obligatoire !";
+            } else {
+                $telephone = trim($_POST["telephone"]);
+            }
+
+            if (empty(trim($_POST["motif"]))) {
+                $erreurs["motif"] = "L'objet du mail est obligatoire !";
+            } else {
+                $motif = trim($_POST["motif"]);
+            }
+
+            if (empty(trim($_POST["message"]))) {
+                $erreurs["message"] = "Le mail doit contenir un message !";
+            } else {
+                $message = trim($_POST["message"]);
+            }
+
+            if (empty($erreurs)) {
+                $entetes = [
+                    "from" => $mail,
+                    "content-type" => "text/plain; charset=utf-8"
+                ];
+                if (mail($destinataire, $_POST["motif"], $_POST["message"], $entetes)) {
+                    addMail($prenom, $nom, $mail, $telephone, $motif, $message);
+                } else {
+                    echo "Une erreur est survenue.";
+                }
             }
         }
     }
@@ -97,7 +103,7 @@
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
             <?php if (isset($_SESSION["user"])) { ?>
-                <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
+                <li><a href="contacts.php?deco=ok">Déconnexion</a></li>
             <?php } else { ?>
                 <li><a href="connexion.php">Connexion</a></li>
             <?php } ?>

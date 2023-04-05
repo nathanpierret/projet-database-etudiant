@@ -1,18 +1,23 @@
 <?php
+    session_start();
+    if (isset($_GET["deco"])) {
+        unset($_SESSION["user"]);
+        header("Location: liste-promotions.php");
+    } else {
+        require_once "src/modele/etudiant-db.php";
+        require_once "src/modele/promotion-db.php";
+        require_once "src/outils/dates.php";
 
-require_once "src/modele/etudiant-db.php";
-require_once "src/modele/promotion-db.php";
-require_once "src/outils/dates.php";
+        $promotions = selectAllPromotions();
+        $etudiants = null;
+        $_SESSION["last-visited"] = "liste-promotions.php";
 
-$promotions = selectAllPromotions();
-$etudiants = null;
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $filtrePromotion = $_POST["filtre-promotion"];
-    $etudiants = selectStudentsByPromotion(intval($filtrePromotion));
-    $promotion = selectPromotionById(intval($filtrePromotion));
-}
-
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $filtrePromotion = $_POST["filtre-promotion"];
+            $etudiants = selectStudentsByPromotion(intval($filtrePromotion));
+            $promotion = selectPromotionById(intval($filtrePromotion));
+        }
+    }
 ?>
 
 <!doctype html>
@@ -43,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
             <?php if (isset($_SESSION["user"])) { ?>
-                <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
+                <li><a href="liste-promotions.php?deco=ok">Déconnexion</a></li>
             <?php } else { ?>
                 <li><a href="connexion.php">Connexion</a></li>
             <?php } ?>

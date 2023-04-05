@@ -1,11 +1,16 @@
 <?php
     session_start();
 
-    require_once "src/modele/etudiant-db.php";
-    require_once "src/outils/dates.php";
+    if (isset($_GET["deco"])) {
+        unset($_SESSION["user"]);
+        header("Location: index.php");
+    } else {
+        require_once "src/modele/etudiant-db.php";
+        require_once "src/outils/dates.php";
 
-    $etudiants = selectAllStudents();
-
+        $etudiants = selectAllStudents();
+        $_SESSION["last-visited"] = "index.php";
+    }
 ?>
 
 <!doctype html>
@@ -27,7 +32,6 @@
 <body>
 
 <div class="container">
-
     <header class="header">
         <img src="images/Logo_Best_Students2.png" alt="Logo Best Students">
         <ul>
@@ -36,7 +40,7 @@
             <li><a href="liste-promotions.php">Liste des promotions</a></li>
             <li><a href="contacts.php">Contactez-nous</a></li>
             <?php if (isset($_SESSION["user"])) { ?>
-            <li><a href="<?php unset($_SESSION["user"])?>">Déconnexion</a></li>
+            <li><a href="index.php?deco=ok">Déconnexion</a></li>
             <?php } else { ?>
             <li><a href="connexion.php">Connexion</a></li>
             <?php } ?>
@@ -44,7 +48,6 @@
     </header>
 
     <div class="content">
-
         <?php foreach ($etudiants as $etudiant) { ?>
         <div class="carte">
             <img src="images/<?=$etudiant["nom_fichier_photo"]?>" alt="Photo étudiant" class="image">
